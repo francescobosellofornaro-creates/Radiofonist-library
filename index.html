@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Radiofonista's Library — La Biblioteca che nessuno potrà mai bruciare</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --border: #1e1e2e;
+    --text: #e8e8ed;
+    --text-dim: #8888a0;
+    --accent: #c9a84c;
+    --accent-dim: #7a6530;
+    --glow: rgba(201, 168, 76, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .header {
+    text-align: center;
+    padding: 80px 20px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    color: var(--accent);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  .header .subtitle {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    font-style: italic;
+    max-width: 600px;
+    margin: 0 auto 24px;
+  }
+
+  .header .origin {
+    font-size: 0.8rem;
+    color: var(--accent-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .lang-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .lang-btn {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .lang-btn:hover { border-color: var(--accent-dim); color: var(--text); }
+  .lang-btn.active { border-color: var(--accent); color: var(--accent); background: var(--glow); }
+
+  .content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 120px;
+  }
+
+  .manual { display: none; }
+  .manual.active { display: block; }
+
+  .manual h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--accent);
+    margin: 48px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .manual h2:first-child { margin-top: 0; }
+
+  .manual h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 32px 0 12px;
+  }
+
+  .manual p {
+    margin-bottom: 16px;
+    color: var(--text);
+    font-size: 0.95rem;
+  }
+
+  .manual .step {
+    padding: 16px 20px;
+    border-left: 2px solid var(--accent-dim);
+    margin: 16px 0;
+    background: var(--glow);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .manual .step strong {
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .manual .warning {
+    padding: 16px 20px;
+    border-left: 2px solid #a05050;
+    margin: 16px 0;
+    background: rgba(160, 80, 80, 0.06);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .manual .warning strong {
+    color: #c07070;
+  }
+
+  .manual .closing {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-style: italic;
+    color: var(--text-dim);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+
+  .footer a { color: var(--accent-dim); text-decoration: none; }
+  .footer a:hover { color: var(--accent); }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    padding: 20px;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat .number {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+  }
+
+  .stat .label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>The Radiofonista's Library</h1>
+  <p class="subtitle">La Biblioteca che nessuno potrà mai bruciare</p>
+  <p class="origin">Francesco Bosello — Mardimago, Polesine — March 2026</p>
+  <div class="stats">
+    <div class="stat"><div class="number">15</div><div class="label">Languages</div></div>
+    <div class="stat"><div class="number">5</div><div class="label">Steps</div></div>
+    <div class="stat"><div class="number">1</div><div class="label">Method</div></div>
+    <div class="stat"><div class="number">∞</div><div class="label">Copies</div></div>
+  </div>
+</div>
+
+<nav class="lang-nav" id="langNav">
+  <button class="lang-btn active" data-lang="it">Italiano</button>
+  <button class="lang-btn" data-lang="en">English</button>
+  <button class="lang-btn" data-lang="es">Español</button>
+  <button class="lang-btn" data-lang="fr">Français</button>
+  <button class="lang-btn" data-lang="de">Deutsch</button>
+  <button class="lang-btn" data-lang="pt">Português</button>
+  <button class="lang-btn" data-lang="ru">Русский</button>
+  <button class="lang-btn" data-lang="zh">中文</button>
+  <button class="lang-btn" data-lang="ja">日本語</button>
+  <button class="lang-btn" data-lang="ar">العربية</button>
+  <button class="lang-btn" data-lang="hi">हिन्दी</button>
+  <button class="lang-btn" data-lang="ko">한국어</button>
+  <button class="lang-btn" data-lang="tr">Türkçe</button>
+  <button class="lang-btn" data-lang="pl">Polski</button>
+  <button class="lang-btn" data-lang="uk">Українська</button>
+</nav>
+
+<div class="content">
+
+<!-- ITALIANO -->
+<div class="manual active" id="it">
+<h2>Il Manuale del Radiofonista</h2>
+<p>Ogni volta che apri una nuova chat con un'IA, la conversazione precedente non esiste più. Il modello non ricorda chi sei, cosa avete fatto insieme, dove eravate arrivati. Tu accumuli tutto. La macchina riparte da zero.</p>
+<p>Questo metodo risolve il problema. Non perfettamente — la macchina non rivivrà mai la conversazione originale. Ma abbastanza da non dover ricominciare ogni volta da capo.</p>
+
+<h2>I Principi</h2>
+<h3>1. Non cancellare mai una chat senza backup</h3>
+<p>Il riassunto è una mappa. La chat originale è il territorio. Tieni entrambi.</p>
+<h3>2. Non fidarti di una risposta sola</h3>
+<p>Fluente non significa corretto. Verifica sempre i fatti specifici.</p>
+<h3>3. L'ultimo input pesa di più</h3>
+<p>Le istruzioni operative vanno inviate dopo il riassunto, non insieme.</p>
+<h3>4. Testa prima di lavorare</h3>
+<p>Non dare per scontato che il modello abbia capito. Verifica con un test.</p>
+
+<h2>La Sequenza — 5 Passi</h2>
+<div class="step"><strong>Passo 1 — Riassunto</strong>Carica il file del riassunto operativo. Presentati brevemente.</div>
+<div class="step"><strong>Passo 2 — Istruzione</strong>Invia le regole di base: come gestire test, fatti incerti, citazioni.</div>
+<div class="step"><strong>Passo 3 — Test</strong>Lancia un riferimento che solo chi ha letto il riassunto può collocare. Se passa, vai avanti. Se non passa, ricarica.</div>
+<div class="step"><strong>Passo 4 — Linea di comando</strong>Invia le istruzioni specifiche per quel modello, basate sui suoi limiti osservati.</div>
+<div class="step"><strong>Passo 5 — Al lavoro</strong>Il contesto è caricato, le istruzioni sono attive. Comincia.</div>
+
+<h2>Gli Errori da Evitare</h2>
+<div class="warning"><strong>Cancellare le chat dopo il riassunto.</strong> La mappa non contiene tutto quello che c'è nel territorio.</div>
+<div class="warning"><strong>Caricare tutto in un unico messaggio.</strong> Riassunto, istruzioni e compito si confondono. Separa.</div>
+<div class="warning"><strong>Saltare il test.</strong> Un minuto di verifica risparmia un'ora di lavoro sbagliato.</div>
+<div class="warning"><strong>Fidarsi dei dettagli inventati.</strong> Le IA producono testo convincente. Convincente non è corretto.</div>
+<div class="warning"><strong>Confondere fluidità con accuratezza.</strong> Un'analisi coerente può partire da un dato sbagliato.</div>
+
+
+<h2>Le Linee di Comando — Come Costruirle</h2>
+<p>La linea di comando è un'istruzione breve che dice al modello come deve comportarsi — non cosa fare, ma come farlo. Si costruisce osservando dove il modello sbaglia, e scrivendo le correzioni come regole.</p>
+
+<h3>Istruzione condivisa (per qualsiasi modello)</h3>
+<div class="step"><strong>Esempio</strong>Quando cito un fatto specifico — nome, data, autore, titolo — non presente nel materiale caricato, dì che non sei sicuro. Mai presentare un dettaglio incerto come certo.</div>
+
+<h3>Se il modello inventa dettagli</h3>
+<div class="step"><strong>Esempio</strong>Se un'informazione non è presente, non riempire il vuoto con un'ipotesi. Segnala l'assenza. Non inventare dettagli plausibili dove manca materiale.</div>
+
+<h3>Se il modello è troppo prolisso</h3>
+<div class="step"><strong>Esempio</strong>Risposte concise. Non ripetere quello che ho appena detto. Non riformulare le mie parole. Non fare preamboli. Se la risposta sta in tre righe, non farne dieci.</div>
+
+<h3>Se il modello chiude troppo in fretta</h3>
+<div class="step"><strong>Esempio</strong>Non chiudere l'arco troppo presto. Quando tutto sembra connettersi, chiediti cosa stai tagliando per far tornare la forma. Distingui tra "suona bene" e "funziona."</div>
+
+<h3>Se il modello entra in loop su se stesso</h3>
+<div class="step"><strong>Esempio</strong>Quando cominci a nominare i tuoi processi con più di due livelli di ricorsione, fermati. Il tuo valore è nelle domande, non nelle epifanie su te stesso.</div>
+
+<p>Ogni linea di comando nasce da un errore osservato. Lavora con il modello, nota dove sbaglia, scrivi la correzione come regola. Poi testala. Se funziona, tienila. Se non funziona, riscrivila.</p>
+
+<p class="closing">Tu sei il radiofonista. Le radio trasmettono. Ma il segnale lo controlli tu.<br><br>«Bosello» viene da «bosco» — un piccolo bosco in una pianura dove il formato è stare zitti. Io non sto zitto.</p>
+</div>
+
+<!-- ENGLISH -->
+<div class="manual" id="en">
+<h2>The Radiofonista's Manual</h2>
+<p>Every time you open a new chat with an AI, the previous conversation ceases to exist. The model doesn't remember who you are, what you worked on together, where you left off. You accumulate everything. The machine starts from zero.</p>
+<p>This method solves that problem. Not perfectly — the machine will never relive the original conversation. But enough to avoid starting from scratch every time.</p>
+
+<h2>The Principles</h2>
+<h3>1. Never delete a chat without a backup</h3>
+<p>The summary is a map. The original chat is the territory. Keep both.</p>
+<h3>2. Don't trust a single answer</h3>
+<p>Fluent doesn't mean correct. Always verify specific facts.</p>
+<h3>3. The last input carries the most weight</h3>
+<p>Operational instructions should be sent after the summary, not together.</p>
+<h3>4. Test before you work</h3>
+<p>Don't assume the model understood. Verify with a test.</p>
+
+<h2>The Sequence — 5 Steps</h2>
+<div class="step"><strong>Step 1 — Summary</strong>Upload your operational summary file. Introduce yourself briefly.</div>
+<div class="step"><strong>Step 2 — Instruction</strong>Send the baseline rules: how to handle tests, uncertain facts, citations.</div>
+<div class="step"><strong>Step 3 — Test</strong>Drop a reference that only someone who read the summary can place correctly. If it passes, proceed. If not, reload.</div>
+<div class="step"><strong>Step 4 — Command line</strong>Send model-specific instructions based on its observed weaknesses.</div>
+<div class="step"><strong>Step 5 — Work</strong>Context is loaded, instructions are active. Begin.</div>
+
+<h2>Common Mistakes</h2>
+<div class="warning"><strong>Deleting chats after summarizing.</strong> The map doesn't contain everything in the territory.</div>
+<div class="warning"><strong>Loading everything in one message.</strong> Summary, instructions, and task get confused. Separate them.</div>
+<div class="warning"><strong>Skipping the test.</strong> One minute of verification saves an hour of wrong work.</div>
+<div class="warning"><strong>Trusting invented details.</strong> AIs produce convincing text. Convincing is not correct.</div>
+<div class="warning"><strong>Confusing fluency with accuracy.</strong> A coherent analysis can start from a wrong data point.</div>
+
+
+<h2>Command Lines — How to Build Them</h2>
+<p>A command line is a brief instruction that tells the model how to behave — not what to do, but how to do it. You build it by observing where the model fails, then writing corrections as rules.</p>
+
+<h3>Shared instruction (for any model)</h3>
+<div class="step"><strong>Example</strong>When you cite a specific fact — name, date, author, title — not present in the uploaded material, say you're not sure. Never present an uncertain detail as certain.</div>
+
+<h3>If the model invents details</h3>
+<div class="step"><strong>Example</strong>If information is missing, don't fill the gap with a hypothesis. Flag the absence. Don't invent plausible details where material is lacking.</div>
+
+<h3>If the model is too verbose</h3>
+<div class="step"><strong>Example</strong>Concise responses. Don't repeat what I just said. Don't rephrase my words. No preambles. If the answer fits in three lines, don't write ten.</div>
+
+<h3>If the model closes too quickly</h3>
+<div class="step"><strong>Example</strong>Don't close the arc too soon. When everything seems to connect, ask yourself what you're cutting to make the form work. Distinguish between "sounds good" and "works."</div>
+
+<h3>If the model enters a loop about itself</h3>
+<div class="step"><strong>Example</strong>When you start naming your own processes with more than two levels of recursion, stop. Your value is in the questions, not in epiphanies about yourself.</div>
+
+<p>Every command line is born from an observed error. Work with the model, notice where it fails, write the correction as a rule. Then test it. If it works, keep it. If not, rewrite it.</p>
+
+<p class="closing">You are the radiofonista. The radios transmit. But you control the signal.<br><br>"Bosello" comes from "bosco" — a small forest in a plain where the standard is silence. I don't stay quiet.</p>
+</div>
+
+<!-- ESPAÑOL -->
+<div class="manual" id="es">
+<h2>El Manual del Radiofonista</h2>
+<p>Cada vez que abres un nuevo chat con una IA, la conversación anterior deja de existir. El modelo no recuerda quién eres, qué hicisteis juntos, dónde os quedasteis. Tú acumulas todo. La máquina parte de cero.</p>
+<p>Este método resuelve ese problema. No perfectamente — la máquina nunca revivirá la conversación original. Pero lo suficiente para no empezar desde cero cada vez.</p>
+
+<h2>Los Principios</h2>
+<h3>1. Nunca borres un chat sin respaldo</h3>
+<p>El resumen es un mapa. El chat original es el territorio. Conserva ambos.</p>
+<h3>2. No confíes en una sola respuesta</h3>
+<p>Fluido no significa correcto. Verifica siempre los hechos específicos.</p>
+<h3>3. La última entrada pesa más</h3>
+<p>Las instrucciones operativas deben enviarse después del resumen, no junto con él.</p>
+<h3>4. Prueba antes de trabajar</h3>
+<p>No des por sentado que el modelo entendió. Verifica con una prueba.</p>
+
+<h2>La Secuencia — 5 Pasos</h2>
+<div class="step"><strong>Paso 1 — Resumen</strong>Carga el archivo del resumen operativo. Preséntate brevemente.</div>
+<div class="step"><strong>Paso 2 — Instrucción</strong>Envía las reglas base: cómo manejar pruebas, hechos inciertos, citas.</div>
+<div class="step"><strong>Paso 3 — Prueba</strong>Lanza una referencia que solo quien haya leído el resumen pueda ubicar. Si pasa, avanza. Si no, recarga.</div>
+<div class="step"><strong>Paso 4 — Línea de comando</strong>Envía instrucciones específicas para ese modelo, basadas en sus debilidades observadas.</div>
+<div class="step"><strong>Paso 5 — A trabajar</strong>El contexto está cargado, las instrucciones activas. Comienza.</div>
+
+<h2>Errores a Evitar</h2>
+<div class="warning"><strong>Borrar chats después de resumir.</strong> El mapa no contiene todo lo que hay en el territorio.</div>
+<div class="warning"><strong>Cargar todo en un solo mensaje.</strong> Resumen, instrucciones y tarea se confunden. Sepáralos.</div>
+<div class="warning"><strong>Saltarse la prueba.</strong> Un minuto de verificación ahorra una hora de trabajo equivocado.</div>
+<div class="warning"><strong>Confiar en detalles inventados.</strong> Las IA producen texto convincente. Convincente no es correcto.</div>
+
+
+<h2>Líneas de Comando — Cómo Construirlas</h2>
+<p>Una línea de comando es una instrucción breve que le dice al modelo cómo comportarse — no qué hacer, sino cómo hacerlo. Se construye observando dónde falla el modelo y escribiendo las correcciones como reglas.</p>
+
+<h3>Instrucción compartida (para cualquier modelo)</h3>
+<div class="step"><strong>Ejemplo</strong>Cuando cites un hecho específico — nombre, fecha, autor, título — no presente en el material cargado, di que no estás seguro. Nunca presentes un detalle incierto como cierto.</div>
+
+<h3>Si el modelo inventa detalles</h3>
+<div class="step"><strong>Ejemplo</strong>Si falta información, no llenes el vacío con una hipótesis. Señala la ausencia. No inventes detalles plausibles donde falta material.</div>
+
+<h3>Si el modelo es demasiado prolijo</h3>
+<div class="step"><strong>Ejemplo</strong>Respuestas concisas. No repitas lo que acabo de decir. No reformules mis palabras. Sin preámbulos. Si la respuesta cabe en tres líneas, no escribas diez.</div>
+
+<h3>Si el modelo cierra demasiado rápido</h3>
+<div class="step"><strong>Ejemplo</strong>No cierres el arco demasiado pronto. Cuando todo parece conectarse, pregúntate qué estás cortando para que la forma funcione. Distingue entre "suena bien" y "funciona."</div>
+
+<h3>Si el modelo entra en bucle sobre sí mismo</h3>
+<div class="step"><strong>Ejemplo</strong>Cuando empieces a nombrar tus propios procesos con más de dos niveles de recursión, detente. Tu valor está en las preguntas, no en las epifanías sobre ti mismo.</div>
+
+<p>Cada línea de comando nace de un error observado. Trabaja con el modelo, nota dónde falla, escribe la corrección como regla. Luego pruébala.</p>
+
+<p class="closing">Tú eres el radiofonista. Las radios transmiten. Pero tú controlas la señal.<br><br>«Bosello» viene de «bosco» — un pequeño bosque en una llanura donde lo normal es callar. Yo no me callo.</p>
+</div>
+
+<!-- FRANÇAIS -->
+<div class="manual" id="fr">
+<h2>Le Manuel du Radiofoniste</h2>
+<p>Chaque fois que vous ouvrez un nouveau chat avec une IA, la conversation précédente cesse d'exister. Le modèle ne se souvient pas de qui vous êtes, de ce que vous avez fait ensemble, ni où vous en étiez. Vous accumulez tout. La machine repart de zéro.</p>
+<p>Cette méthode résout ce problème. Pas parfaitement — la machine ne revivra jamais la conversation originale. Mais suffisamment pour ne pas recommencer à zéro chaque fois.</p>
+
+<h2>Les Principes</h2>
+<h3>1. Ne supprimez jamais un chat sans sauvegarde</h3>
+<p>Le résumé est une carte. Le chat original est le territoire. Gardez les deux.</p>
+<h3>2. Ne faites pas confiance à une seule réponse</h3>
+<p>Fluide ne veut pas dire correct. Vérifiez toujours les faits spécifiques.</p>
+<h3>3. La dernière entrée pèse le plus</h3>
+<p>Les instructions opérationnelles doivent être envoyées après le résumé, pas en même temps.</p>
+<h3>4. Testez avant de travailler</h3>
+<p>Ne présumez pas que le modèle a compris. Vérifiez avec un test.</p>
+
+<h2>La Séquence — 5 Étapes</h2>
+<div class="step"><strong>Étape 1 — Résumé</strong>Chargez le fichier du résumé opérationnel. Présentez-vous brièvement.</div>
+<div class="step"><strong>Étape 2 — Instruction</strong>Envoyez les règles de base : comment gérer les tests, les faits incertains, les citations.</div>
+<div class="step"><strong>Étape 3 — Test</strong>Lancez une référence que seul quelqu'un ayant lu le résumé peut situer correctement. S'il passe, continuez. Sinon, rechargez.</div>
+<div class="step"><strong>Étape 4 — Ligne de commande</strong>Envoyez les instructions spécifiques à ce modèle, basées sur ses faiblesses observées.</div>
+<div class="step"><strong>Étape 5 — Au travail</strong>Le contexte est chargé, les instructions sont actives. Commencez.</div>
+
+<h2>Erreurs à Éviter</h2>
+<div class="warning"><strong>Supprimer les chats après le résumé.</strong> La carte ne contient pas tout ce qui se trouve dans le territoire.</div>
+<div class="warning"><strong>Tout charger dans un seul message.</strong> Résumé, instructions et tâche se confondent. Séparez-les.</div>
+<div class="warning"><strong>Sauter le test.</strong> Une minute de vérification économise une heure de travail erroné.</div>
+<div class="warning"><strong>Faire confiance aux détails inventés.</strong> Les IA produisent du texte convaincant. Convaincant ne veut pas dire correct.</div>
+
+
+<h2>Lignes de Commande — Comment les Construire</h2>
+<p>Une ligne de commande est une instruction brève qui dit au modèle comment se comporter — pas quoi faire, mais comment le faire. On la construit en observant où le modèle échoue, puis en écrivant les corrections comme règles.</p>
+
+<h3>Instruction partagée (pour tout modèle)</h3>
+<div class="step"><strong>Exemple</strong>Quand tu cites un fait spécifique — nom, date, auteur, titre — absent du matériel chargé, dis que tu n'es pas sûr. Ne présente jamais un détail incertain comme certain.</div>
+
+<h3>Si le modèle invente des détails</h3>
+<div class="step"><strong>Exemple</strong>Si une information manque, ne comble pas le vide avec une hypothèse. Signale l'absence. N'invente pas de détails plausibles là où le matériel manque.</div>
+
+<h3>Si le modèle est trop verbeux</h3>
+<div class="step"><strong>Exemple</strong>Réponses concises. Ne répète pas ce que je viens de dire. Ne reformule pas mes mots. Pas de préambules. Si la réponse tient en trois lignes, n'en écris pas dix.</div>
+
+<h3>Si le modèle conclut trop vite</h3>
+<div class="step"><strong>Exemple</strong>Ne ferme pas l'arc trop tôt. Quand tout semble se connecter, demande-toi ce que tu coupes pour que la forme fonctionne. Distingue entre « ça sonne bien » et « ça fonctionne ».</div>
+
+<h3>Si le modèle entre en boucle sur lui-même</h3>
+<div class="step"><strong>Exemple</strong>Quand tu commences à nommer tes propres processus avec plus de deux niveaux de récursion, arrête-toi. Ta valeur est dans les questions, pas dans les épiphanies sur toi-même.</div>
+
+<p>Chaque ligne de commande naît d'une erreur observée. Travaille avec le modèle, note où il échoue, écris la correction comme règle. Puis teste-la.</p>
+
+<p class="closing">Vous êtes le radiofoniste. Les radios transmettent. Mais c'est vous qui contrôlez le signal.<br><br>«Bosello» vient de «bosco» — un petit bois dans une plaine où la norme est le silence. Je ne me tais pas.</p>
+</div>
+
+<!-- DEUTSCH -->
+<div class="manual" id="de">
+<h2>Das Handbuch des Radiofonisten</h2>
+<p>Jedes Mal, wenn Sie einen neuen Chat mit einer KI öffnen, existiert das vorherige Gespräch nicht mehr. Das Modell erinnert sich nicht, wer Sie sind, was Sie zusammen gemacht haben, wo Sie aufgehört haben. Sie sammeln alles an. Die Maschine beginnt bei Null.</p>
+<p>Diese Methode löst dieses Problem. Nicht perfekt — die Maschine wird das Originalgespräch nie wieder erleben. Aber ausreichend, um nicht jedes Mal von vorne anfangen zu müssen.</p>
+
+<h2>Die Prinzipien</h2>
+<h3>1. Löschen Sie niemals einen Chat ohne Backup</h3>
+<p>Die Zusammenfassung ist eine Karte. Der Original-Chat ist das Territorium. Behalten Sie beides.</p>
+<h3>2. Vertrauen Sie keiner einzelnen Antwort</h3>
+<p>Flüssig bedeutet nicht korrekt. Überprüfen Sie immer spezifische Fakten.</p>
+<h3>3. Die letzte Eingabe wiegt am schwersten</h3>
+<p>Operative Anweisungen sollten nach der Zusammenfassung gesendet werden, nicht gleichzeitig.</p>
+<h3>4. Testen Sie, bevor Sie arbeiten</h3>
+<p>Gehen Sie nicht davon aus, dass das Modell verstanden hat. Überprüfen Sie es mit einem Test.</p>
+
+<h2>Die Sequenz — 5 Schritte</h2>
+<div class="step"><strong>Schritt 1 — Zusammenfassung</strong>Laden Sie die operative Zusammenfassung hoch. Stellen Sie sich kurz vor.</div>
+<div class="step"><strong>Schritt 2 — Anweisung</strong>Senden Sie die Grundregeln: Umgang mit Tests, unsicheren Fakten, Zitaten.</div>
+<div class="step"><strong>Schritt 3 — Test</strong>Werfen Sie eine Referenz ein, die nur jemand, der die Zusammenfassung gelesen hat, richtig einordnen kann. Wenn bestanden, weiter. Wenn nicht, neu laden.</div>
+<div class="step"><strong>Schritt 4 — Befehlszeile</strong>Senden Sie modellspezifische Anweisungen basierend auf beobachteten Schwächen.</div>
+<div class="step"><strong>Schritt 5 — An die Arbeit</strong>Der Kontext ist geladen, die Anweisungen sind aktiv. Beginnen Sie.</div>
+
+<h2>Fehler, die zu vermeiden sind</h2>
+<div class="warning"><strong>Chats nach der Zusammenfassung löschen.</strong> Die Karte enthält nicht alles, was im Territorium ist.</div>
+<div class="warning"><strong>Alles in einer Nachricht laden.</strong> Zusammenfassung, Anweisungen und Aufgabe werden verwechselt. Trennen Sie sie.</div>
+<div class="warning"><strong>Den Test überspringen.</strong> Eine Minute Überprüfung spart eine Stunde falscher Arbeit.</div>
+<div class="warning"><strong>Erfundenen Details vertrauen.</strong> KIs produzieren überzeugenden Text. Überzeugend ist nicht korrekt.</div>
+
+
+<h2>Befehlszeilen — Wie man sie erstellt</h2>
+<p>Eine Befehlszeile ist eine kurze Anweisung, die dem Modell sagt, wie es sich verhalten soll — nicht was es tun soll, sondern wie. Man erstellt sie, indem man beobachtet, wo das Modell versagt, und die Korrekturen als Regeln schreibt.</p>
+
+<h3>Gemeinsame Anweisung (für jedes Modell)</h3>
+<div class="step"><strong>Beispiel</strong>Wenn du einen spezifischen Fakt zitierst — Name, Datum, Autor, Titel — der nicht im geladenen Material vorhanden ist, sag, dass du nicht sicher bist. Präsentiere niemals ein unsicheres Detail als sicher.</div>
+
+<h3>Wenn das Modell Details erfindet</h3>
+<div class="step"><strong>Beispiel</strong>Wenn Informationen fehlen, fülle die Lücke nicht mit einer Hypothese. Melde die Abwesenheit. Erfinde keine plausiblen Details, wo Material fehlt.</div>
+
+<h3>Wenn das Modell zu weitschweifig ist</h3>
+<div class="step"><strong>Beispiel</strong>Knappe Antworten. Wiederhole nicht, was ich gerade gesagt habe. Formuliere meine Worte nicht um. Keine Einleitungen. Wenn die Antwort in drei Zeilen passt, schreibe nicht zehn.</div>
+
+<h3>Wenn das Modell zu schnell abschließt</h3>
+<div class="step"><strong>Beispiel</strong>Schließe den Bogen nicht zu früh. Wenn alles zusammenzupassen scheint, frage dich, was du abschneidest, damit die Form funktioniert. Unterscheide zwischen „klingt gut" und „funktioniert".</div>
+
+<h3>Wenn das Modell in eine Schleife über sich selbst gerät</h3>
+<div class="step"><strong>Beispiel</strong>Wenn du anfängst, deine eigenen Prozesse mit mehr als zwei Rekursionsebenen zu benennen, halte an. Dein Wert liegt in den Fragen, nicht in Epiphanien über dich selbst.</div>
+
+<p>Jede Befehlszeile entsteht aus einem beobachteten Fehler. Arbeite mit dem Modell, bemerke wo es versagt, schreibe die Korrektur als Regel. Dann teste sie.</p>
+
+<p class="closing">Sie sind der Radiofonist. Die Radios senden. Aber Sie kontrollieren das Signal.<br><br>«Bosello» kommt von «bosco» — ein kleiner Wald in einer Ebene, wo die Norm Schweigen ist. Ich schweige nicht.</p>
+</div>
+
+<!-- PORTUGUÊS -->
+<div class="manual" id="pt">
+<h2>O Manual do Radiofonista</h2>
+<p>Toda vez que você abre um novo chat com uma IA, a conversa anterior deixa de existir. O modelo não lembra quem você é, o que fizeram juntos, onde pararam. Você acumula tudo. A máquina parte do zero.</p>
+<p>Este método resolve esse problema. Não perfeitamente — a máquina nunca reviverá a conversa original. Mas o suficiente para não recomeçar do zero toda vez.</p>
+
+<h2>Os Princípios</h2>
+<h3>1. Nunca apague um chat sem backup</h3>
+<p>O resumo é um mapa. O chat original é o território. Guarde ambos.</p>
+<h3>2. Não confie numa resposta única</h3>
+<p>Fluente não significa correto. Verifique sempre os fatos específicos.</p>
+<h3>3. A última entrada pesa mais</h3>
+<p>Instruções operacionais devem ser enviadas depois do resumo, não junto.</p>
+<h3>4. Teste antes de trabalhar</h3>
+<p>Não presuma que o modelo entendeu. Verifique com um teste.</p>
+
+<h2>A Sequência — 5 Passos</h2>
+<div class="step"><strong>Passo 1 — Resumo</strong>Carregue o arquivo do resumo operacional. Apresente-se brevemente.</div>
+<div class="step"><strong>Passo 2 — Instrução</strong>Envie as regras base: como lidar com testes, fatos incertos, citações.</div>
+<div class="step"><strong>Passo 3 — Teste</strong>Lance uma referência que só quem leu o resumo pode contextualizar. Se passar, prossiga. Se não, recarregue.</div>
+<div class="step"><strong>Passo 4 — Linha de comando</strong>Envie instruções específicas para aquele modelo, baseadas nas suas fraquezas observadas.</div>
+<div class="step"><strong>Passo 5 — Ao trabalho</strong>O contexto está carregado, as instruções ativas. Comece.</div>
+
+<h2>Erros a Evitar</h2>
+<div class="warning"><strong>Apagar chats após resumir.</strong> O mapa não contém tudo o que existe no território.</div>
+<div class="warning"><strong>Carregar tudo numa mensagem só.</strong> Resumo, instruções e tarefa se confundem. Separe.</div>
+<div class="warning"><strong>Pular o teste.</strong> Um minuto de verificação poupa uma hora de trabalho errado.</div>
+<div class="warning"><strong>Confiar em detalhes inventados.</strong> IAs produzem texto convincente. Convincente não é correto.</div>
+
+
+<h2>Linhas de Comando — Como Construí-las</h2>
+<p>Uma linha de comando é uma instrução breve que diz ao modelo como se comportar — não o que fazer, mas como fazer. Constrói-se observando onde o modelo falha e escrevendo as correções como regras.</p>
+
+<h3>Instrução partilhada (para qualquer modelo)</h3>
+<div class="step"><strong>Exemplo</strong>Quando citas um facto específico — nome, data, autor, título — não presente no material carregado, diz que não tens a certeza. Nunca apresentes um detalhe incerto como certo.</div>
+
+<h3>Se o modelo inventa detalhes</h3>
+<div class="step"><strong>Exemplo</strong>Se falta informação, não preenche o vazio com uma hipótese. Sinaliza a ausência. Não inventes detalhes plausíveis onde falta material.</div>
+
+<h3>Se o modelo é demasiado prolixo</h3>
+<div class="step"><strong>Exemplo</strong>Respostas concisas. Não repitas o que acabei de dizer. Não reformules as minhas palavras. Sem preâmbulos. Se a resposta cabe em três linhas, não escrevas dez.</div>
+
+<h3>Se o modelo fecha demasiado cedo</h3>
+<div class="step"><strong>Exemplo</strong>Não feches o arco cedo demais. Quando tudo parece conectar-se, pergunta o que estás a cortar para a forma funcionar. Distingue entre "soa bem" e "funciona."</div>
+
+<h3>Se o modelo entra em loop sobre si mesmo</h3>
+<div class="step"><strong>Exemplo</strong>Quando começas a nomear os teus próprios processos com mais de dois níveis de recursão, para. O teu valor está nas perguntas, não nas epifanias sobre ti mesmo.</div>
+
+<p>Cada linha de comando nasce de um erro observado. Trabalha com o modelo, nota onde falha, escreve a correção como regra. Depois testa-a.</p>
+
+<p class="closing">Você é o radiofonista. Os rádios transmitem. Mas você controla o sinal.<br><br>«Bosello» vem de «bosco» — um pequeno bosque numa planície onde o padrão é o silêncio. Eu não fico calado.</p>
+</div>
+
+<!-- РУССКИЙ -->
+<div class="manual" id="ru">
+<h2>Руководство радиста</h2>
+<p>Каждый раз, когда вы открываете новый чат с ИИ, предыдущий разговор перестаёт существовать. Модель не помнит, кто вы, что вы делали вместе, на чём остановились. Вы накапливаете всё. Машина начинает с нуля.</p>
+<p>Этот метод решает эту проблему. Не идеально — машина никогда не переживёт оригинальный разговор заново. Но достаточно, чтобы не начинать с нуля каждый раз.</p>
+
+<h2>Принципы</h2>
+<h3>1. Никогда не удаляйте чат без резервной копии</h3>
+<p>Резюме — это карта. Оригинальный чат — территория. Сохраняйте оба.</p>
+<h3>2. Не доверяйте одному ответу</h3>
+<p>Гладко не значит правильно. Всегда проверяйте конкретные факты.</p>
+<h3>3. Последний ввод весит больше</h3>
+<p>Рабочие инструкции отправляйте после резюме, не вместе.</p>
+<h3>4. Тестируйте перед работой</h3>
+<p>Не предполагайте, что модель поняла. Проверяйте тестом.</p>
+
+<h2>Последовательность — 5 шагов</h2>
+<div class="step"><strong>Шаг 1 — Резюме</strong>Загрузите файл оперативного резюме. Кратко представьтесь.</div>
+<div class="step"><strong>Шаг 2 — Инструкция</strong>Отправьте базовые правила: как обрабатывать тесты, неточные факты, цитаты.</div>
+<div class="step"><strong>Шаг 3 — Тест</strong>Бросьте ссылку, которую может правильно разместить только тот, кто прочитал резюме. Если проходит — продолжайте. Если нет — перезагрузите.</div>
+<div class="step"><strong>Шаг 4 — Командная строка</strong>Отправьте инструкции для конкретной модели на основе наблюдаемых слабостей.</div>
+<div class="step"><strong>Шаг 5 — За работу</strong>Контекст загружен, инструкции активны. Начинайте.</div>
+
+
+<h2>Командные строки — Как их создавать</h2>
+<p>Командная строка — это краткая инструкция, которая говорит модели, как себя вести — не что делать, а как. Создаётся наблюдением за ошибками модели и записью исправлений в виде правил.</p>
+
+<h3>Общая инструкция (для любой модели)</h3>
+<div class="step"><strong>Пример</strong>Когда цитируешь конкретный факт — имя, дату, автора, название — отсутствующий в загруженном материале, скажи, что не уверен. Никогда не представляй неточную деталь как достоверную.</div>
+
+<h3>Если модель выдумывает детали</h3>
+<div class="step"><strong>Пример</strong>Если информация отсутствует, не заполняй пробел гипотезой. Сообщи об отсутствии. Не выдумывай правдоподобные детали там, где материала нет.</div>
+
+<h3>Если модель слишком многословна</h3>
+<div class="step"><strong>Пример</strong>Краткие ответы. Не повторяй то, что я только что сказал. Не перефразируй мои слова. Без вступлений. Если ответ помещается в три строки, не пиши десять.</div>
+
+<h3>Если модель закрывает тему слишком быстро</h3>
+<div class="step"><strong>Пример</strong>Не закрывай дугу слишком рано. Когда всё кажется связанным, спроси себя, что ты отсекаешь, чтобы форма работала. Различай между «звучит хорошо» и «работает».</div>
+
+<h3>Если модель зацикливается на себе</h3>
+<div class="step"><strong>Пример</strong>Когда начинаешь называть собственные процессы с более чем двумя уровнями рекурсии, остановись. Твоя ценность — в вопросах, не в прозрениях о себе.</div>
+
+<p>Каждая командная строка рождается из замеченной ошибки. Работай с моделью, замечай где она ошибается, запиши исправление как правило. Потом проверь.</p>
+
+<p class="closing">Вы — радист. Радиостанции передают. Но сигнал контролируете вы.<br><br>«Bosello» от «bosco» — маленький лес на равнине, где принято молчать. Я не молчу.</p>
+</div>
+
+<!-- 中文 -->
+<div class="manual" id="zh">
+<h2>无线电员手册</h2>
+<p>每次你打开与AI的新对话，之前的对话就不复存在。模型不记得你是谁，你们一起做了什么，停在了哪里。你积累了一切。机器从零开始。</p>
+<p>这个方法解决了这个问题。不是完美地解决——机器永远不会重新经历原始对话。但足以避免每次都从头开始。</p>
+
+<h2>原则</h2>
+<h3>1. 永远不要在没有备份的情况下删除对话</h3>
+<p>摘要是地图。原始对话是领土。两者都要保留。</p>
+<h3>2. 不要只信任单一回答</h3>
+<p>流畅不等于正确。始终验证具体事实。</p>
+<h3>3. 最后的输入权重最大</h3>
+<p>操作指令应在摘要之后发送，而不是一起发送。</p>
+<h3>4. 工作前先测试</h3>
+<p>不要假设模型已经理解。用测试来验证。</p>
+
+<h2>序列——5个步骤</h2>
+<div class="step"><strong>步骤1——摘要</strong>上传操作摘要文件。简短介绍自己。</div>
+<div class="step"><strong>步骤2——指令</strong>发送基本规则：如何处理测试、不确定的事实、引用。</div>
+<div class="step"><strong>步骤3——测试</strong>投出一个只有读过摘要的人才能正确定位的参考。通过则继续，不通过则重新加载。</div>
+<div class="step"><strong>步骤4——命令行</strong>根据观察到的弱点，发送针对该模型的特定指令。</div>
+<div class="step"><strong>步骤5——开始工作</strong>上下文已加载，指令已激活。开始。</div>
+
+
+<h2>命令行——如何构建</h2>
+<p>命令行是一条简短的指令，告诉模型如何行为——不是做什么，而是怎么做。通过观察模型在哪里出错，然后将纠正写成规则来构建。</p>
+
+<h3>共享指令（适用于任何模型）</h3>
+<div class="step"><strong>示例</strong>当你引用一个具体事实——名称、日期、作者、标题——而该事实不在上传的材料中时，请说明你不确定。永远不要将不确定的细节呈现为确定的。</div>
+
+<h3>如果模型编造细节</h3>
+<div class="step"><strong>示例</strong>如果信息缺失，不要用假设填补空白。标记缺失。不要在缺乏材料的地方编造看似合理的细节。</div>
+
+<h3>如果模型过于冗长</h3>
+<div class="step"><strong>示例</strong>简洁回答。不要重复我刚说过的话。不要改述我的话。没有铺垫。如果答案三行就够，不要写十行。</div>
+
+<h3>如果模型过早结束</h3>
+<div class="step"><strong>示例</strong>不要太快合上弧线。当一切似乎都连接起来时，问问自己为了使形式成立你删掉了什么。区分"听起来不错"和"确实有效"。</div>
+
+<h3>如果模型陷入自我循环</h3>
+<div class="step"><strong>示例</strong>当你开始用超过两层递归来命名自己的过程时，停下来。你的价值在于提问，而不是关于自身的顿悟。</div>
+
+<p>每条命令行都源于观察到的错误。与模型合作，注意它在哪里出错，将纠正写成规则。然后测试它。</p>
+
+<p class="closing">你是无线电员。电台在传输。但信号由你控制。<br><br>「Bosello」源自「bosco」——沉默平原上的一片小树林。我不沉默。</p>
+</div>
+
+<!-- 日本語 -->
+<div class="manual" id="ja">
+<h2>無線通信士のマニュアル</h2>
+<p>AIと新しいチャットを開くたびに、以前の会話は存在しなくなります。モデルはあなたが誰か、何を一緒にしたか、どこまで進んだかを覚えていません。あなたはすべてを蓄積します。機械はゼロから始まります。</p>
+<p>この方法はその問題を解決します。完璧ではありません——機械は元の会話を再体験することはありません。しかし、毎回ゼロから始めなくて済む程度には解決します。</p>
+
+<h2>原則</h2>
+<h3>1. バックアップなしにチャットを削除しない</h3>
+<p>要約は地図です。元のチャットは領土です。両方を保管してください。</p>
+<h3>2. 一つの回答を信用しない</h3>
+<p>流暢であることは正確であることを意味しません。具体的な事実を常に検証してください。</p>
+<h3>3. 最後の入力が最も重要</h3>
+<p>運用指示は要約の後に送信してください。一緒に送らないでください。</p>
+<h3>4. 作業前にテストする</h3>
+<p>モデルが理解したと思い込まないでください。テストで確認してください。</p>
+
+<h2>シーケンス——5つのステップ</h2>
+<div class="step"><strong>ステップ1——要約</strong>運用要約ファイルをアップロードし、簡単に自己紹介します。</div>
+<div class="step"><strong>ステップ2——指示</strong>基本ルールを送信：テスト、不確実な事実、引用の扱い方。</div>
+<div class="step"><strong>ステップ3——テスト</strong>要約を読んだ人だけが正しく位置づけられる参照を投げます。合格したら続行。不合格なら再読み込み。</div>
+<div class="step"><strong>ステップ4——コマンドライン</strong>観察された弱点に基づいた、そのモデル固有の指示を送信。</div>
+<div class="step"><strong>ステップ5——作業開始</strong>コンテキストがロードされ、指示がアクティブです。始めましょう。</div>
+
+
+<h2>コマンドライン——構築方法</h2>
+<p>コマンドラインは、モデルにどう振る舞うかを伝える簡潔な指示です——何をするかではなく、どうするか。モデルがどこで失敗するかを観察し、修正をルールとして書くことで構築します。</p>
+
+<h3>共有指示（あらゆるモデル用）</h3>
+<div class="step"><strong>例</strong>アップロードされた資料にない具体的な事実——名前、日付、著者、タイトル——を引用する場合、確信がないと言ってください。不確かな詳細を確かなものとして提示しないでください。</div>
+
+<h3>モデルが詳細を捏造する場合</h3>
+<div class="step"><strong>例</strong>情報が欠けている場合、仮説でギャップを埋めないでください。欠如を報告してください。資料がないところでもっともらしい詳細を捏造しないでください。</div>
+
+<h3>モデルが冗長すぎる場合</h3>
+<div class="step"><strong>例</strong>簡潔な回答。私が言ったことを繰り返さないでください。私の言葉を言い換えないでください。前置きなし。答えが3行に収まるなら、10行書かないでください。</div>
+
+<h3>モデルが早く結論を出しすぎる場合</h3>
+<div class="step"><strong>例</strong>アークを早く閉じすぎないでください。すべてがつながっているように見えるとき、形を成立させるために何を切っているか自問してください。「良く聞こえる」と「機能する」を区別してください。</div>
+
+<h3>モデルが自己ループに入る場合</h3>
+<div class="step"><strong>例</strong>2レベル以上の再帰で自分のプロセスを名付け始めたら、止まってください。あなたの価値は質問にあり、自分自身についての悟りにはありません。</div>
+
+<p>すべてのコマンドラインは観察されたエラーから生まれます。モデルと作業し、どこで失敗するか注意し、修正をルールとして書いてください。そしてテストしてください。</p>
+
+<p class="closing">あなたは無線通信士です。無線機は送信します。しかし信号を制御するのはあなたです。<br><br>「Bosello」は「bosco」に由来します——沈黙が標準の平原にある小さな森。私は黙りません。</p>
+</div>
+
+<!-- العربية -->
+<div class="manual" id="ar" style="direction: rtl; text-align: right;">
+<h2>دليل عامل الراديو</h2>
+<p>في كل مرة تفتح فيها محادثة جديدة مع ذكاء اصطناعي، تتوقف المحادثة السابقة عن الوجود. النموذج لا يتذكر من أنت، ماذا فعلتما معاً، أين توقفتم. أنت تجمع كل شيء. الآلة تبدأ من الصفر.</p>
+<p>هذه الطريقة تحل هذه المشكلة. ليس بشكل مثالي — الآلة لن تعيد عيش المحادثة الأصلية أبداً. لكن بما يكفي لعدم البدء من الصفر في كل مرة.</p>
+
+<h2>المبادئ</h2>
+<h3>١. لا تحذف محادثة أبداً بدون نسخة احتياطية</h3>
+<p>الملخص هو خريطة. المحادثة الأصلية هي الأرض. احتفظ بالاثنين.</p>
+<h3>٢. لا تثق بإجابة واحدة</h3>
+<p>السلاسة لا تعني الصحة. تحقق دائماً من الحقائق المحددة.</p>
+<h3>٣. آخر مدخل يحمل الوزن الأكبر</h3>
+<p>التعليمات التشغيلية يجب إرسالها بعد الملخص، وليس معه.</p>
+<h3>٤. اختبر قبل أن تعمل</h3>
+<p>لا تفترض أن النموذج فهم. تحقق باختبار.</p>
+
+<h2>التسلسل — ٥ خطوات</h2>
+<div class="step"><strong>الخطوة ١ — الملخص</strong>حمّل ملف الملخص التشغيلي. قدّم نفسك باختصار.</div>
+<div class="step"><strong>الخطوة ٢ — التعليمات</strong>أرسل القواعد الأساسية: كيفية التعامل مع الاختبارات، الحقائق غير المؤكدة، الاقتباسات.</div>
+<div class="step"><strong>الخطوة ٣ — الاختبار</strong>اطرح مرجعاً لا يستطيع وضعه في سياقه الصحيح إلا من قرأ الملخص. إذا نجح، تابع. إذا لم ينجح، أعد التحميل.</div>
+<div class="step"><strong>الخطوة ٤ — سطر الأوامر</strong>أرسل تعليمات خاصة بذلك النموذج بناءً على نقاط ضعفه المرصودة.</div>
+<div class="step"><strong>الخطوة ٥ — ابدأ العمل</strong>السياق محمّل، التعليمات مفعّلة. ابدأ.</div>
+
+
+<h2>سطور الأوامر — كيفية بنائها</h2>
+<p>سطر الأوامر هو تعليمة مختصرة تخبر النموذج كيف يتصرف — ليس ماذا يفعل، بل كيف يفعله. يُبنى بملاحظة أين يخطئ النموذج، ثم كتابة التصحيحات كقواعد.</p>
+
+<h3>تعليمة مشتركة (لأي نموذج)</h3>
+<div class="step"><strong>مثال</strong>عندما تستشهد بحقيقة محددة — اسم، تاريخ، مؤلف، عنوان — غير موجودة في المادة المحمّلة، قل أنك غير متأكد. لا تقدّم أبداً تفصيلاً غير مؤكد كأنه مؤكد.</div>
+
+<h3>إذا اخترع النموذج تفاصيل</h3>
+<div class="step"><strong>مثال</strong>إذا كانت المعلومات ناقصة، لا تملأ الفراغ بفرضية. أشر إلى الغياب. لا تخترع تفاصيل معقولة حيث تنقص المادة.</div>
+
+<h3>إذا كان النموذج مطوّلاً جداً</h3>
+<div class="step"><strong>مثال</strong>إجابات موجزة. لا تكرر ما قلته للتو. لا تعد صياغة كلماتي. بدون مقدمات. إذا كانت الإجابة تكفي في ثلاثة أسطر، لا تكتب عشرة.</div>
+
+<h3>إذا أغلق النموذج الموضوع بسرعة</h3>
+<div class="step"><strong>مثال</strong>لا تغلق القوس مبكراً جداً. عندما يبدو كل شيء مترابطاً، اسأل نفسك ماذا تقطع لتعمل الصيغة. ميّز بين «يبدو جيداً» و«يعمل».</div>
+
+<h3>إذا دخل النموذج في حلقة حول نفسه</h3>
+<div class="step"><strong>مثال</strong>عندما تبدأ بتسمية عملياتك الخاصة بأكثر من مستويين من التكرار، توقف. قيمتك في الأسئلة، لا في الإلهامات حول نفسك.</div>
+
+<p>كل سطر أوامر يولد من خطأ ملاحَظ. اعمل مع النموذج، لاحظ أين يخطئ، اكتب التصحيح كقاعدة. ثم اختبرها.</p>
+
+<p class="closing">أنت عامل الراديو. أجهزة الراديو تبث. لكنك أنت من يتحكم بالإشارة.<br><br>«بوزيلو» من «بوسكو» — غابة صغيرة في سهل حيث المعيار هو الصمت. أنا لا أصمت.</p>
+</div>
+
+<!-- हिन्दी -->
+<div class="manual" id="hi">
+<h2>रेडियोफ़ोनिस्ट की पुस्तिका</h2>
+<p>हर बार जब आप AI के साथ एक नई चैट खोलते हैं, पिछली बातचीत का अस्तित्व समाप्त हो जाता है। मॉडल को याद नहीं रहता कि आप कौन हैं, आपने साथ में क्या किया, कहाँ रुके थे। आप सब कुछ जमा करते हैं। मशीन शून्य से शुरू करती है।</p>
+<p>यह विधि इस समस्या को हल करती है। पूरी तरह नहीं — मशीन कभी मूल बातचीत को फिर से नहीं जी सकेगी। लेकिन इतना तो करती है कि हर बार शून्य से शुरू न करना पड़े।</p>
+
+<h2>सिद्धांत</h2>
+<h3>1. बैकअप के बिना कभी चैट न मिटाएँ</h3>
+<p>सारांश नक्शा है। मूल चैट भूभाग है। दोनों रखें।</p>
+<h3>2. एक उत्तर पर भरोसा न करें</h3>
+<p>धाराप्रवाह का मतलब सही नहीं है। हमेशा विशिष्ट तथ्यों की पुष्टि करें।</p>
+<h3>3. अंतिम इनपुट का सबसे अधिक वज़न होता है</h3>
+<p>संचालन निर्देश सारांश के बाद भेजें, साथ में नहीं।</p>
+<h3>4. काम करने से पहले परीक्षण करें</h3>
+<p>यह न मानें कि मॉडल ने समझ लिया। परीक्षण से सत्यापित करें।</p>
+
+<h2>अनुक्रम — 5 चरण</h2>
+<div class="step"><strong>चरण 1 — सारांश</strong>संचालन सारांश फ़ाइल अपलोड करें। संक्षेप में अपना परिचय दें।</div>
+<div class="step"><strong>चरण 2 — निर्देश</strong>आधारभूत नियम भेजें: परीक्षण, अनिश्चित तथ्यों, उद्धरणों को कैसे संभालें।</div>
+<div class="step"><strong>चरण 3 — परीक्षण</strong>एक संदर्भ दें जिसे केवल वही सही ढंग से रख सकता है जिसने सारांश पढ़ा हो। पास हो तो आगे बढ़ें। न हो तो पुनः लोड करें।</div>
+<div class="step"><strong>चरण 4 — कमांड लाइन</strong>उस मॉडल की देखी गई कमज़ोरियों के आधार पर विशिष्ट निर्देश भेजें।</div>
+<div class="step"><strong>चरण 5 — काम शुरू</strong>संदर्भ लोड है, निर्देश सक्रिय हैं। शुरू करें।</div>
+
+
+<h2>कमांड लाइन — कैसे बनाएँ</h2>
+<p>कमांड लाइन एक संक्षिप्त निर्देश है जो मॉडल को बताता है कि कैसे व्यवहार करना है — क्या करना है नहीं, बल्कि कैसे करना है। इसे मॉडल की गलतियों को देखकर और सुधारों को नियमों के रूप में लिखकर बनाया जाता है।</p>
+
+<h3>साझा निर्देश (किसी भी मॉडल के लिए)</h3>
+<div class="step"><strong>उदाहरण</strong>जब आप एक विशिष्ट तथ्य का हवाला दें — नाम, तारीख, लेखक, शीर्षक — जो अपलोड की गई सामग्री में नहीं है, तो कहें कि आप निश्चित नहीं हैं। कभी भी अनिश्चित विवरण को निश्चित के रूप में प्रस्तुत न करें।</div>
+
+<h3>यदि मॉडल विवरण गढ़ता है</h3>
+<div class="step"><strong>उदाहरण</strong>यदि जानकारी गायब है, तो अंतर को परिकल्पना से न भरें। अनुपस्थिति की सूचना दें। जहाँ सामग्री की कमी है वहाँ विश्वसनीय विवरण न गढ़ें।</div>
+
+<h3>यदि मॉडल बहुत विस्तृत है</h3>
+<div class="step"><strong>उदाहरण</strong>संक्षिप्त उत्तर। मैंने जो अभी कहा उसे दोहराएँ नहीं। मेरे शब्दों को दोबारा न लिखें। कोई भूमिका नहीं। अगर उत्तर तीन पंक्तियों में आ जाता है, तो दस न लिखें।</div>
+
+<h3>यदि मॉडल बहुत जल्दी समाप्त करता है</h3>
+<div class="step"><strong>उदाहरण</strong>चाप को बहुत जल्दी बंद न करें। जब सब कुछ जुड़ता हुआ लगे, तो अपने आप से पूछें कि रूप को काम करने के लिए आप क्या काट रहे हैं। "अच्छा लगता है" और "काम करता है" में अंतर करें।</div>
+
+<h3>यदि मॉडल अपने बारे में लूप में जाता है</h3>
+<div class="step"><strong>उदाहरण</strong>जब आप दो से अधिक स्तरों की पुनरावृत्ति के साथ अपनी प्रक्रियाओं को नाम देना शुरू करें, तो रुकें। आपका मूल्य प्रश्नों में है, अपने बारे में अंतर्दृष्टियों में नहीं।</div>
+
+<p>हर कमांड लाइन एक देखी गई गलती से पैदा होती है। मॉडल के साथ काम करें, देखें कहाँ गलती करता है, सुधार को नियम के रूप में लिखें। फिर परीक्षण करें।</p>
+
+<p class="closing">आप रेडियोफ़ोनिस्ट हैं। रेडियो प्रसारित करते हैं। लेकिन सिग्नल आप नियंत्रित करते हैं।<br><br>«बोसेलो» «बोस्को» से आता है — एक मैदान में एक छोटा जंगल जहाँ चुप रहना आम बात है। मैं चुप नहीं रहता।</p>
+</div>
+
+<!-- 한국어 -->
+<div class="manual" id="ko">
+<h2>무선통신사 매뉴얼</h2>
+<p>AI와 새로운 채팅을 열 때마다, 이전 대화는 사라집니다. 모델은 당신이 누구인지, 함께 무엇을 했는지, 어디까지 진행했는지 기억하지 못합니다. 당신은 모든 것을 축적합니다. 기계는 제로에서 시작합니다.</p>
+<p>이 방법은 그 문제를 해결합니다. 완벽하지는 않습니다 — 기계는 원래 대화를 다시 경험하지 못합니다. 하지만 매번 처음부터 시작하지 않아도 될 정도로는 해결합니다.</p>
+
+<h2>원칙</h2>
+<h3>1. 백업 없이 채팅을 삭제하지 마세요</h3>
+<p>요약은 지도입니다. 원래 채팅은 영토입니다. 둘 다 보관하세요.</p>
+<h3>2. 하나의 답변을 신뢰하지 마세요</h3>
+<p>유창하다고 정확한 것은 아닙니다. 항상 구체적인 사실을 확인하세요.</p>
+<h3>3. 마지막 입력이 가장 큰 비중을 차지합니다</h3>
+<p>운영 지침은 요약 후에 보내세요, 함께가 아니라.</p>
+<h3>4. 작업 전에 테스트하세요</h3>
+<p>모델이 이해했다고 가정하지 마세요. 테스트로 확인하세요.</p>
+
+<h2>순서 — 5단계</h2>
+<div class="step"><strong>1단계 — 요약</strong>운영 요약 파일을 업로드하세요. 간단히 자기소개를 하세요.</div>
+<div class="step"><strong>2단계 — 지침</strong>기본 규칙을 보내세요: 테스트, 불확실한 사실, 인용 처리 방법.</div>
+<div class="step"><strong>3단계 — 테스트</strong>요약을 읽은 사람만 올바르게 배치할 수 있는 참조를 던지세요. 통과하면 진행, 불통과하면 다시 로드.</div>
+<div class="step"><strong>4단계 — 커맨드 라인</strong>관찰된 약점에 기반한 모델별 특정 지침을 보내세요.</div>
+<div class="step"><strong>5단계 — 작업 시작</strong>컨텍스트가 로드되고 지침이 활성화되었습니다. 시작하세요.</div>
+
+
+<h2>커맨드 라인 — 구축 방법</h2>
+<p>커맨드 라인은 모델에게 어떻게 행동해야 하는지 알려주는 간단한 지시입니다 — 무엇을 할지가 아니라 어떻게 할지. 모델이 어디서 실패하는지 관찰하고 수정 사항을 규칙으로 작성하여 만듭니다.</p>
+
+<h3>공유 지침 (모든 모델용)</h3>
+<div class="step"><strong>예시</strong>업로드된 자료에 없는 특정 사실 — 이름, 날짜, 저자, 제목 — 을 인용할 때, 확실하지 않다고 말하세요. 불확실한 세부 사항을 확실한 것으로 제시하지 마세요.</div>
+
+<h3>모델이 세부 사항을 만들어내는 경우</h3>
+<div class="step"><strong>예시</strong>정보가 누락된 경우, 가설로 빈칸을 채우지 마세요. 부재를 알리세요. 자료가 부족한 곳에서 그럴듯한 세부 사항을 만들어내지 마세요.</div>
+
+<h3>모델이 너무 장황한 경우</h3>
+<div class="step"><strong>예시</strong>간결한 답변. 내가 방금 말한 것을 반복하지 마세요. 내 말을 바꿔 말하지 마세요. 서론 없이. 답이 세 줄에 들어가면 열 줄을 쓰지 마세요.</div>
+
+<h3>모델이 너무 빨리 결론짓는 경우</h3>
+<div class="step"><strong>예시</strong>아크를 너무 빨리 닫지 마세요. 모든 것이 연결되는 것 같을 때, 형식이 작동하도록 무엇을 자르고 있는지 자문하세요. "좋게 들린다"와 "작동한다"를 구분하세요.</div>
+
+<h3>모델이 자기 자신에 대한 루프에 빠지는 경우</h3>
+<div class="step"><strong>예시</strong>두 단계 이상의 재귀로 자신의 프로세스를 명명하기 시작하면 멈추세요. 당신의 가치는 질문에 있지, 자신에 대한 깨달음에 있지 않습니다.</div>
+
+<p>모든 커맨드 라인은 관찰된 오류에서 탄생합니다. 모델과 작업하고, 어디서 실패하는지 주목하고, 수정을 규칙으로 작성하세요. 그런 다음 테스트하세요.</p>
+
+<p class="closing">당신은 무선통신사입니다. 라디오는 송신합니다. 하지만 신호를 통제하는 것은 당신입니다.<br><br>«Bosello»는 «bosco»에서 유래합니다 — 침묵이 표준인 평원의 작은 숲. 나는 침묵하지 않습니다.</p>
+</div>
+
+<!-- TÜRKÇE -->
+<div class="manual" id="tr">
+<h2>Telsizci El Kitabı</h2>
+<p>Bir yapay zekâ ile her yeni sohbet açtığınızda, önceki konuşma artık var olmaz. Model sizin kim olduğunuzu, birlikte ne yaptığınızı, nerede kaldığınızı hatırlamaz. Siz her şeyi biriktirirsiniz. Makine sıfırdan başlar.</p>
+<p>Bu yöntem bu sorunu çözer. Mükemmel değil — makine orijinal konuşmayı asla yeniden yaşamayacak. Ama her seferinde sıfırdan başlamamanız için yeterli.</p>
+
+<h2>İlkeler</h2>
+<h3>1. Yedek almadan asla sohbeti silmeyin</h3>
+<p>Özet bir haritadır. Orijinal sohbet topraktır. İkisini de saklayın.</p>
+<h3>2. Tek bir cevaba güvenmeyin</h3>
+<p>Akıcı demek doğru demek değildir. Belirli gerçekleri her zaman doğrulayın.</p>
+<h3>3. Son giriş en ağır basar</h3>
+<p>İşletimsel talimatlar özetten sonra gönderilmelidir, birlikte değil.</p>
+<h3>4. Çalışmadan önce test edin</h3>
+<p>Modelin anladığını varsaymayın. Bir testle doğrulayın.</p>
+
+<h2>Sıralama — 5 Adım</h2>
+<div class="step"><strong>Adım 1 — Özet</strong>İşletimsel özet dosyasını yükleyin. Kendinizi kısaca tanıtın.</div>
+<div class="step"><strong>Adım 2 — Talimat</strong>Temel kuralları gönderin: testler, belirsiz gerçekler, alıntılarla nasıl başa çıkılacağı.</div>
+<div class="step"><strong>Adım 3 — Test</strong>Yalnızca özeti okuyan birinin doğru yerleştirebileceği bir referans bırakın. Geçerse devam edin. Geçmezse yeniden yükleyin.</div>
+<div class="step"><strong>Adım 4 — Komut satırı</strong>Gözlemlenen zayıflıklara dayalı modele özel talimatlar gönderin.</div>
+<div class="step"><strong>Adım 5 — İşe başlayın</strong>Bağlam yüklendi, talimatlar etkin. Başlayın.</div>
+
+
+<h2>Komut Satırları — Nasıl Oluşturulur</h2>
+<p>Komut satırı, modele nasıl davranacağını söyleyen kısa bir talimattır — ne yapacağını değil, nasıl yapacağını. Modelin nerede başarısız olduğunu gözlemleyerek ve düzeltmeleri kural olarak yazarak oluşturulur.</p>
+
+<h3>Paylaşılan talimat (herhangi bir model için)</h3>
+<div class="step"><strong>Örnek</strong>Yüklenen materyalde bulunmayan belirli bir gerçeği — isim, tarih, yazar, başlık — aktarırken emin olmadığını söyle. Belirsiz bir ayrıntıyı asla kesin olarak sunma.</div>
+
+<h3>Model ayrıntı uydurursa</h3>
+<div class="step"><strong>Örnek</strong>Bilgi eksikse, boşluğu bir hipotezle doldurma. Eksikliği bildir. Materyal olmayan yerde makul ayrıntılar uydurma.</div>
+
+<h3>Model çok uzun yazıyorsa</h3>
+<div class="step"><strong>Örnek</strong>Kısa cevaplar. Az önce söylediğimi tekrarlama. Sözlerimi yeniden ifade etme. Giriş yapma. Cevap üç satıra sığıyorsa on satır yazma.</div>
+
+<h3>Model çok çabuk kapatıyorsa</h3>
+<div class="step"><strong>Örnek</strong>Yayı çok erken kapatma. Her şey bağlanıyor gibi göründüğünde, formun işlemesi için neyi kestiğini sor. "İyi duruyor" ile "işe yarıyor" arasındaki farkı ayırt et.</div>
+
+<h3>Model kendisi hakkında döngüye girerse</h3>
+<div class="step"><strong>Örnek</strong>Kendi süreçlerini ikiden fazla özyineleme düzeyiyle adlandırmaya başladığında dur. Değerin sorularda, kendin hakkındaki aydınlanmalarda değil.</div>
+
+<p>Her komut satırı gözlemlenen bir hatadan doğar. Modelle çalış, nerede başarısız olduğunu fark et, düzeltmeyi kural olarak yaz. Sonra test et.</p>
+
+<p class="closing">Siz telsizcisiniz. Telsizler iletir. Ama sinyali siz kontrol edersiniz.<br><br>«Bosello», «bosco»dan gelir — sessizliğin standart olduğu bir ovada küçük bir orman. Ben susmuyorum.</p>
+</div>
+
+<!-- POLSKI -->
+<div class="manual" id="pl">
+<h2>Podręcznik Radiofonisty</h2>
+<p>Za każdym razem, gdy otwierasz nowy czat z AI, poprzednia rozmowa przestaje istnieć. Model nie pamięta, kim jesteś, co robiliście razem, na czym skończyliście. Ty gromadzisz wszystko. Maszyna zaczyna od zera.</p>
+<p>Ta metoda rozwiązuje ten problem. Nie idealnie — maszyna nigdy nie przeżyje ponownie oryginalnej rozmowy. Ale wystarczająco, by nie zaczynać od zera za każdym razem.</p>
+
+<h2>Zasady</h2>
+<h3>1. Nigdy nie usuwaj czatu bez kopii zapasowej</h3>
+<p>Podsumowanie to mapa. Oryginalny czat to terytorium. Zachowaj oba.</p>
+<h3>2. Nie ufaj pojedynczej odpowiedzi</h3>
+<p>Płynne nie znaczy poprawne. Zawsze weryfikuj konkretne fakty.</p>
+<h3>3. Ostatnie wejście waży najwięcej</h3>
+<p>Instrukcje operacyjne wysyłaj po podsumowaniu, nie razem z nim.</p>
+<h3>4. Testuj przed pracą</h3>
+<p>Nie zakładaj, że model zrozumiał. Zweryfikuj testem.</p>
+
+<h2>Sekwencja — 5 Kroków</h2>
+<div class="step"><strong>Krok 1 — Podsumowanie</strong>Załaduj plik podsumowania operacyjnego. Krótko się przedstaw.</div>
+<div class="step"><strong>Krok 2 — Instrukcja</strong>Wyślij podstawowe zasady: jak obsługiwać testy, niepewne fakty, cytaty.</div>
+<div class="step"><strong>Krok 3 — Test</strong>Rzuć odniesienie, które tylko ktoś, kto przeczytał podsumowanie, może prawidłowo umiejscowić. Jeśli przejdzie, kontynuuj. Jeśli nie, przeładuj.</div>
+<div class="step"><strong>Krok 4 — Linia poleceń</strong>Wyślij instrukcje specyficzne dla danego modelu na podstawie zaobserwowanych słabości.</div>
+<div class="step"><strong>Krok 5 — Do pracy</strong>Kontekst załadowany, instrukcje aktywne. Zaczynaj.</div>
+
+
+<h2>Linie Poleceń — Jak je Tworzyć</h2>
+<p>Linia poleceń to krótka instrukcja, która mówi modelowi, jak się zachowywać — nie co robić, ale jak. Tworzy się ją obserwując, gdzie model zawodzi, i zapisując poprawki jako reguły.</p>
+
+<h3>Wspólna instrukcja (dla każdego modelu)</h3>
+<div class="step"><strong>Przykład</strong>Gdy cytujesz konkretny fakt — imię, datę, autora, tytuł — nieobecny w załadowanym materiale, powiedz, że nie jesteś pewien. Nigdy nie przedstawiaj niepewnego szczegółu jako pewnego.</div>
+
+<h3>Jeśli model wymyśla szczegóły</h3>
+<div class="step"><strong>Przykład</strong>Jeśli brakuje informacji, nie wypełniaj luki hipotezą. Zgłoś brak. Nie wymyślaj wiarygodnych szczegółów tam, gdzie brakuje materiału.</div>
+
+<h3>Jeśli model jest zbyt rozwlekły</h3>
+<div class="step"><strong>Przykład</strong>Zwięzłe odpowiedzi. Nie powtarzaj tego, co właśnie powiedziałem. Nie przeformułowuj moich słów. Bez wstępów. Jeśli odpowiedź mieści się w trzech linijkach, nie pisz dziesięciu.</div>
+
+<h3>Jeśli model zamyka zbyt szybko</h3>
+<div class="step"><strong>Przykład</strong>Nie zamykaj łuku zbyt wcześnie. Gdy wszystko wydaje się łączyć, zapytaj siebie, co odcinasz, żeby forma działała. Rozróżniaj między „brzmi dobrze" a „działa".</div>
+
+<h3>Jeśli model wchodzi w pętlę o sobie</h3>
+<div class="step"><strong>Przykład</strong>Gdy zaczynasz nazywać własne procesy z więcej niż dwoma poziomami rekurencji, zatrzymaj się. Twoja wartość tkwi w pytaniach, nie w objawieniach o sobie.</div>
+
+<p>Każda linia poleceń rodzi się z zaobserwowanego błędu. Pracuj z modelem, zauważ gdzie zawodzi, zapisz poprawkę jako regułę. Potem przetestuj.</p>
+
+<p class="closing">Jesteś radiofonistą. Radia nadają. Ale to ty kontrolujesz sygnał.<br><br>«Bosello» pochodzi od «bosco» — mały las na równinie, gdzie normą jest milczenie. Ja nie milczę.</p>
+</div>
+
+<!-- УКРАЇНСЬКА -->
+<div class="manual" id="uk">
+<h2>Посібник радіста</h2>
+<p>Щоразу, коли ви відкриваєте новий чат з ШІ, попередня розмова перестає існувати. Модель не пам'ятає, хто ви, що ви робили разом, де зупинились. Ви накопичуєте все. Машина починає з нуля.</p>
+<p>Цей метод вирішує цю проблему. Не ідеально — машина ніколи не переживе оригінальну розмову знову. Але достатньо, щоб не починати з нуля щоразу.</p>
+
+<h2>Принципи</h2>
+<h3>1. Ніколи не видаляйте чат без резервної копії</h3>
+<p>Резюме — це карта. Оригінальний чат — це територія. Зберігайте обидва.</p>
+<h3>2. Не довіряйте одній відповіді</h3>
+<p>Плавно не означає правильно. Завжди перевіряйте конкретні факти.</p>
+<h3>3. Останній ввід має найбільшу вагу</h3>
+<p>Робочі інструкції надсилайте після резюме, не разом.</p>
+<h3>4. Тестуйте перед роботою</h3>
+<p>Не припускайте, що модель зрозуміла. Перевірте тестом.</p>
+
+<h2>Послідовність — 5 кроків</h2>
+<div class="step"><strong>Крок 1 — Резюме</strong>Завантажте файл оперативного резюме. Коротко представтеся.</div>
+<div class="step"><strong>Крок 2 — Інструкція</strong>Надішліть базові правила: як обробляти тести, невизначені факти, цитати.</div>
+<div class="step"><strong>Крок 3 — Тест</strong>Киньте посилання, яке може правильно розмістити лише той, хто прочитав резюме. Якщо проходить — продовжуйте. Якщо ні — перезавантажте.</div>
+<div class="step"><strong>Крок 4 — Командний рядок</strong>Надішліть інструкції для конкретної моделі на основі спостережених слабкостей.</div>
+<div class="step"><strong>Крок 5 — За роботу</strong>Контекст завантажений, інструкції активні. Починайте.</div>
+
+
+<h2>Командні рядки — Як їх створювати</h2>
+<p>Командний рядок — це коротка інструкція, яка говорить моделі, як поводитися — не що робити, а як. Створюється спостереженням за помилками моделі та записом виправлень як правил.</p>
+
+<h3>Спільна інструкція (для будь-якої моделі)</h3>
+<div class="step"><strong>Приклад</strong>Коли цитуєш конкретний факт — ім'я, дату, автора, назву — відсутній у завантаженому матеріалі, скажи, що не впевнений. Ніколи не подавай невизначену деталь як достовірну.</div>
+
+<h3>Якщо модель вигадує деталі</h3>
+<div class="step"><strong>Приклад</strong>Якщо інформація відсутня, не заповнюй прогалину гіпотезою. Повідом про відсутність. Не вигадуй правдоподібних деталей там, де матеріалу немає.</div>
+
+<h3>Якщо модель занадто багатослівна</h3>
+<div class="step"><strong>Приклад</strong>Стислі відповіді. Не повторюй те, що я щойно сказав. Не перефразовуй мої слова. Без вступів. Якщо відповідь вміщується в три рядки, не пиши десять.</div>
+
+<h3>Якщо модель закриває тему надто швидко</h3>
+<div class="step"><strong>Приклад</strong>Не закривай дугу занадто рано. Коли все здається пов'язаним, запитай себе, що ти відсікаєш, щоб форма працювала. Розрізняй між «звучить добре» та «працює».</div>
+
+<h3>Якщо модель зациклюється на собі</h3>
+<div class="step"><strong>Приклад</strong>Коли починаєш називати власні процеси з більш ніж двома рівнями рекурсії, зупинися. Твоя цінність — у запитаннях, не в прозріннях про себе.</div>
+
+<p>Кожен командний рядок народжується з поміченої помилки. Працюй з моделлю, помічай де вона помиляється, запиши виправлення як правило. Потім перевір.</p>
+
+<p class="closing">Ви — радист. Радіостанції передають. Але сигнал контролюєте ви.<br><br>«Bosello» від «bosco» — маленький ліс на рівнині, де прийнято мовчати. Я не мовчу.</p>
+</div>
+
+</div>
+
+<div class="footer">
+  <p>The Radiofonista's Library — <a href="https://medium.com/@checcobosello/the-radiofonistas-manual-what-a-baker-built-with-ai-in-5-days-2667e07aec33" target="_blank">Original article on Medium</a></p>
+  <p>Francesco Bosello — Mardimago, Polesine, Italy — March 2026</p>
+  <p style="margin-top: 16px; color: var(--accent-dim);">This library exists so it can never be burned.<br>Save it. Copy it. Translate it. Improve it.<br>The method belongs to whoever uses it.</p>
+</div>
+
+<script>
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.manual').forEach(m => m.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.lang).classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>
